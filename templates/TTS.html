@@ -23,6 +23,8 @@
   <audio id="audioPlayer" controls></audio>
 
   <script>
+    const API_URL = "https://tts-api-tnhy.vercel.app/api/tts";
+
     class TTSTurbo {
       constructor() {
         this.mediaSource = new MediaSource();
@@ -38,9 +40,10 @@
           });
         });
       }
+
       async play(text, voice) {
         document.getElementById('status').textContent = '⚡ Đang phát...';
-        const resp = await fetch(`/api/tts?text=${encodeURIComponent(text)}&voice=${voice}`);
+        const resp = await fetch(`${API_URL}?text=${encodeURIComponent(text)}&voice=${voice}`);
         const reader = resp.body.getReader();
         while (true) {
           const { done, value } = await reader.read();
@@ -59,6 +62,7 @@
         this.mediaSource.endOfStream();
         document.getElementById('status').textContent = '✅ Hoàn thành';
       }
+
       _appendNext() {
         if (!this.updating && this.queue.length) {
           this.updating = true;
